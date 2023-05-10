@@ -3,7 +3,7 @@
 
 const express = require("express");
 
-const db = require("./fakeDb");
+const { items } = require("./fakeDb");
 const router = new express.Router();
 
 
@@ -15,11 +15,9 @@ router.get("/", function (req, res) {
 
 /** POST /items: accept JSON body, add item, and return it */
 router.post("/", function (req, res) {
-  const data = req.body;
+  items.push(req.body);
 
-  db.items.push(data);
-
-  return res.json({ added: data });
+  return res.json({ added: req.body });
 });
 
 
