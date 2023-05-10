@@ -3,6 +3,7 @@
 const express = require("express");
 const app = express();
 const itemRoutes = require("./itemRoutes.js")
+const { NotFoundError } = require("./expressError");
 
 app.use(express.json());
 
