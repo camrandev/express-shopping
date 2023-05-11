@@ -15,6 +15,7 @@ afterEach(function () {
   db.items.length = 0;
 });
 
+
 /** GET /items - returns `{items: [{name, price}, ...]}` */
 describe("GET /items", function () {
   it("Gets a list of items", async function () {
@@ -23,6 +24,7 @@ describe("GET /items", function () {
     expect(resp.body).toEqual({ items: [candy] });
   });
 });
+
 
 /** POST /items - create item from data; return `{added: {item}}` */
 describe("POST /items", function () {
@@ -38,6 +40,7 @@ describe("POST /items", function () {
   });
 });
 
+
 /** GET /items/:name - returns `{items: [{name, price}, ...]}` */
 describe("GET /items/:name", function () {
   it("Gets a single item", async function () {
@@ -46,8 +49,8 @@ describe("GET /items/:name", function () {
   });
 });
 
-/** PATCH /cats/[name] - update cat; return `{cat: cat}` */
 
+/** PATCH /cats/[name] - update cat; return `{cat: cat}` */
 describe("PATCH /items/:name", function () {
   it("Updates a single items", async function () {
     const resp = await request(app).patch(`/items/${candy.name}`).send({
@@ -59,12 +62,20 @@ describe("PATCH /items/:name", function () {
     });
   });
 
-  //TODO: why would it fail in testing environment but not in real environment?
-  it("Responds with 404 if name invalid", async function () {
-    const resp = await request(app).patch(`/items/nothere`);
+  it("Responds with 400 if req.body undefined", async function () {
+    const resp = await request(app).patch(`/items/${candy.name}`).send();
+    expect(resp.statusCode).toEqual(400);
+  });
+
+  it("Responds with 404 if item does not exist", async function () {
+    const resp = await request(app).patch(`/items/nothere`).send({
+      name: "chips",
+      price: 6.9,
+    });
     expect(resp.statusCode).toEqual(404);
   });
 });
+
 
 /** DELETE /items/:name - delete item,
  *  return `{message: "Deleted"}` */

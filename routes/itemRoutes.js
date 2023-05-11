@@ -29,9 +29,7 @@ router.get("/:name", function (req, res) {
 
 /**PATCH /items/:name: accept JSON body, modify item, return it: */
 router.patch("/:name", function (req, res) {
-  console.log('request body=', req.body)
   if (req.body === undefined) throw new BadRequestError();
-  // console.log('req.body from PATCH', req.body)
   const { name, price } = req.body;
 
   for (const item of items) {
